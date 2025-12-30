@@ -1,0 +1,32 @@
+DATA QUALITY REPORT – FLEXIMART
+
+Customers Data
+----------------
+Total records before deduplication: 26
+Duplicates removed: 1
+Records after deduplication: 25
+Missing emails removed: 10
+Final customer records loaded: 15
+
+Products Data
+---------------
+Total records: 20
+Missing prices handled: 3
+Missing stock values handled: 1
+Category names standardized
+Final product records loaded: 20
+
+Sales Data
+-----------
+Total records before deduplication: 41
+Duplicate transactions removed: 1
+Records after deduplication: 40
+Records with missing customer_id removed: 3
+Records with missing product_id removed: 2
+Records with invalid dates removed: 10
+Final sales records loaded: 25
+
+ETL Status
+-----------
+Data cleaning completed successfully.
+Cleaned CSV files generated.
