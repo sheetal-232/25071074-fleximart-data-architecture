@@ -1,126 +1,120 @@
-Schema Documentation – FlexiMart Database
+Database Schema Documentation – FlexiMart
 
-This document describes the relational database schema used in the FlexiMart project.
-The database is designed using a normalized structure to store customers, products, and sales transactions efficiently.
+1. Entity–Relationship Description
 
-Database Name
-fleximart
+ENTITY: customers  
+Purpose: Stores customer information for all registered users on the FlexiMart platform.
 
-Customers Table
+Attributes:  
+- customer_id: Unique identifier for each customer (Primary Key)  
+- first_name: Customer’s first name  
+- last_name: Customer’s last name  
+- email: Unique email address of the customer  
+- phone: Customer contact number  
+- city: City where the customer resides  
+- registration_date: Date when the customer registered  
 
-Table Name
-customers
+Relationships:  
+- One customer can place many orders (1:M relationship with orders table)
 
-Purpose
-Stores customer information.
+---
 
-Columns
-customer_id
-Primary key. Auto-increment integer.
+ENTITY: products  
+Purpose: Stores product details available for sale on the platform.
 
-first_name
-Customer first name.
+Attributes:  
+- product_id: Unique identifier for each product (Primary Key)  
+- product_name: Name of the product  
+- category: Product category (Electronics, Fashion, Groceries)  
+- price: Price of the product  
+- stock_quantity: Available stock quantity  
 
-last_name
-Customer last name.
+Relationships:  
+- One product can appear in many order items (1:M relationship with order_items table)
 
-email
-Customer email address.
-Unique constraint applied.
+---
 
-phone
-Customer phone number in standardized format.
+ENTITY: orders  
+Purpose: Stores order-level transaction information.
 
-city
-City where the customer resides.
+Attributes:  
+- order_id: Unique identifier for each order (Primary Key)  
+- customer_id: References the customer who placed the order (Foreign Key)  
+- order_date: Date when the order was placed  
+- total_amount: Total value of the order  
+- status: Current status of the order  
 
-registration_date
-Date when the customer registered.
+Relationships:  
+- Each order belongs to one customer  
+- One order can contain many order items (1:M with order_items table)
 
-Products Table
+---
 
-Table Name
-products
+ENTITY: order_items  
+Purpose: Stores detailed line-item information for each order.
 
-Purpose
-Stores product details.
+Attributes:  
+- order_item_id: Unique identifier for each order item (Primary Key)  
+- order_id: References the related order (Foreign Key)  
+- product_id: References the purchased product (Foreign Key)  
+- quantity: Number of units purchased  
+- unit_price: Price per unit at time of purchase  
+- subtotal: Calculated as quantity × unit_price  
 
-Columns
-product_id
-Primary key. Auto-increment integer.
+Relationships:  
+- Each order item belongs to one order  
+- Each order item references one product
 
-product_name
-Name of the product.
+---
 
-category
-Product category such as Electronics, Fashion, or Groceries.
+2. Normalization Explanation (Third Normal Form)
 
-price
-Product price.
+The FlexiMart database design follows Third Normal Form (3NF) to ensure data integrity and minimize redundancy.  
+Each table stores data related to a single entity, and all non-key attributes are fully functionally dependent on the primary key.
 
-stock_quantity
-Available stock count.
+Functional Dependencies:
+- customers: customer_id → first_name, last_name, email, phone, city, registration_date  
+- products: product_id → product_name, category, price, stock_quantity  
+- orders: order_id → customer_id, order_date, total_amount, status  
+- order_items: order_item_id → order_id, product_id, quantity, unit_price, subtotal  
 
-Orders Table
+There are no partial dependencies because each table uses a single-column primary key.  
+There are no transitive dependencies because non-key attributes do not depend on other non-key attributes.
 
-Table Name
-orders
+This design avoids update anomalies by ensuring customer or product details are stored in only one place.  
+Insert anomalies are avoided because new customers, products, or orders can be added independently without requiring unrelated data.  
+Delete anomalies are prevented because removing an order does not remove customer or product information.
 
-Purpose
-Stores order-level transaction data.
+By separating customers, products, orders, and order items into distinct tables, the schema maintains consistency, reduces redundancy, and supports reliable transactional processing.
 
-Columns
-order_id
-Primary key. Auto-increment integer.
+---
 
-customer_id
-Foreign key referencing customers.customer_id.
+3. Sample Data Representation
 
-order_date
-Date when the order was placed.
+Customers (Sample Records)
 
-total_amount
-Total value of the order.
+| customer_id | first_name | last_name | email                  | city      |
+|------------|-----------|-----------|------------------------|-----------|
+| 1          | Rahul     | Sharma    | rahul.sharma@gmail.com | Bangalore |
+| 2          | Priya     | Patel     | priya.patel@yahoo.com  | Mumbai    |
 
-status
-Order status such as Completed or Pending.
+Products (Sample Records)
 
-Order_Items Table
+| product_id | product_name            | category     | price  | stock_quantity |
+|-----------|--------------------------|--------------|--------|----------------|
+| 1         | Samsung Galaxy S21       | Electronics  | 45999  | 150            |
+| 2         | Nike Running Shoes       | Fashion      | 3499   | 80             |
 
-Table Name
-order_items
+Orders (Sample Records)
 
-Purpose
-Stores item-level details for each order.
+| order_id | customer_id | order_date | total_amount | status     |
+|---------|-------------|------------|--------------|------------|
+| 101     | 1           | 2024-01-15 | 45999        | Completed  |
+| 102     | 2           | 2024-01-16 | 6998         | Completed  |
 
-Columns
-order_item_id
-Primary key. Auto-increment integer.
+Order_Items (Sample Records)
 
-order_id
-Foreign key referencing orders.order_id.
-
-product_id
-Foreign key referencing products.product_id.
-
-quantity
-Quantity of the product ordered.
-
-unit_price
-Price of the product at the time of order.
-
-Relationships Summary
-
-customers to orders
-One-to-many relationship.
-One customer can place multiple orders.
-
-orders to order_items
-One-to-many relationship.
-One order can contain multiple products.
-
-products to order_items
-One-to-many relationship.
-One product can appear in multiple order items.
-
-This schema ensures data consistency, avoids redundancy, and supports efficient querying for business analysis
+| order_item_id | order_id | product_id | quantity | unit_price | subtotal |
+|--------------|----------|------------|----------|------------|----------|
+| 1            | 101      | 1          | 1        | 45999      | 45999    |
+| 2            | 102      | 2          | 2        | 3499       | 6998     |
