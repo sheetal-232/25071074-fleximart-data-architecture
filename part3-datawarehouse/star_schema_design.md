@@ -40,6 +40,13 @@ This means each row in the `fact_sales` table represents:
 * On a specific date
 Defining the grain clearly ensures accurate aggregation and consistent analytics.
 
+The chosen granularity for the fact_sales table is transaction line-item level, meaning each row represents a single product sold in an order. This granularity provides maximum analytical flexibility, allowing analysis at the most detailed level such as product-wise sales, customer-wise purchases, and daily trends. From this level, data can easily be aggregated to higher levels like monthly, quarterly, or yearly summaries.
+
+Surrogate keys are used instead of natural keys to improve performance and maintain consistency. Natural keys such as customer IDs or product codes may change over time or vary across source systems, whereas surrogate keys are system-generated, stable, and efficient for joins in a data warehouse environment.
+
+This star schema design supports drill-down and roll-up operations effectively. Analysts can drill down from year to quarter, month, and day using the date dimension, or roll up sales data from individual products to categories. This structure enables fast and flexible analytical queries required for business reporting.
+
+
 5. Schema Benefits for Analytics
 This star schema enables:
 * Monthly and yearly sales trend analysis
