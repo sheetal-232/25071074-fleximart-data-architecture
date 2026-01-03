@@ -1,79 +1,74 @@
-# FlexiMart Data Engineering Assignment
+# FlexiMart Data Architecture Project
 
-## Objective
-Implement a complete data engineering pipeline using Python, MySQL, MongoDB, and Data Warehousing.
+Student Name: Sheetal Sharma  
+Student ID: 25071074  
+Email: sheetallsharma23@gmail.com  
+Date: 04 January 2026  
 
----
+## Project Overview
 
-## Part 1: Data Cleaning & ETL (Python)
-Raw CSV data contained duplicates, missing values, and inconsistent formats.
+This project implements a complete data engineering pipeline for an e-commerce platform called FlexiMart. It covers data cleaning, relational and NoSQL database design, data warehousing using a star schema, and analytical reporting to support business decision-making.
 
-**Actions performed:**
-- Removed duplicates
-- Handled missing values
-- Standardized phone numbers and categories
-- Standardized date formats
-- Generated cleaned CSV files
+## Repository Structure
 
-**Files:**
-- data/*.csv
-- part1-database-etl/etl_pipeline.py
+├── part1-database-etl/
+│   ├── etl_pipeline.py
+│   ├── schema_documentation.md
+│   ├── business_queries.sql
+│   └── data_quality_report.txt
+├── part2-nosql/
+│   ├── nosql_analysis.md
+│   ├── mongodb_operations.js
+│   └── products_catalog.json
+├── part3-datawarehouse/
+│   ├── star_schema_design.md
+│   ├── warehouse_schema.sql
+│   ├── warehouse_data.sql
+│   └── analytics_queries.sql
+└── README.md
 
----
+## Technologies Used
 
-## Part 2: Relational Database (MySQL)
-- Database: `fleximart`
-- Tables: customers, products, orders, order_items
-- Cleaned data inserted via Python ETL script
+- Python 3.x (pandas, mysql-connector-python)
+- MySQL 8.x
+- MongoDB
+- Git and GitHub
+- VS Code
 
-**Business Queries:**
-- Top customers by spending
-- Monthly and cumulative revenue
+## Setup Instructions
 
-File:
-- part1-database-etl/business_queries.sql
+### MySQL Setup
 
----
+Create databases:
 
-## Part 3: NoSQL Database (MongoDB)
-- Database: `fleximart_nosql`
-- Collection: `products`
-- Nested JSON with embedded reviews
+mysql -u root -p -e "CREATE DATABASE fleximart;"
+mysql -u root -p -e "CREATE DATABASE fleximart_dw;"
 
-**Operations:**
-- Insert product catalog
-- Category filtering
-- Average rating aggregation
-- Top-priced products
+Run ETL pipeline:
 
-File:
-- part2-nosql/products-catalog.json
+python part1-database-etl/etl_pipeline.py
 
----
+Run business queries:
 
-## Part 4: Data Warehouse
-- Star schema implemented
-- Fact table: fact_sales
-- Dimension tables: customer, product, date
+mysql -u root -p fleximart < part1-database-etl/business_queries.sql
 
-Files:
-- part3-datawarehouse/warehouse_schema.sql
-- part3-datawarehouse/warehouse_data.sql
+Run data warehouse scripts:
 
----
+mysql -u root -p fleximart_dw < part3-datawarehouse/warehouse_schema.sql
+mysql -u root -p fleximart_dw < part3-datawarehouse/warehouse_data.sql
+mysql -u root -p fleximart_dw < part3-datawarehouse/analytics_queries.sql
 
-## Part 5: Analytics
-Analytical queries for revenue trends and sales insights.
+### MongoDB Setup
 
-File:
-- part3-datawarehouse/analytics_queries.sql
+Open MongoDB shell and run:
 
----
+mongosh < part2-nosql/mongodb_operations.js
 
-## Technologies
-Python, MySQL, MongoDB, Git, VS Code
+## Key Learnings
 
----
+This project helped in understanding end-to-end data engineering workflows including ETL design, relational modeling, NoSQL document modeling, and dimensional data warehousing. It also improved skills in writing analytical SQL queries and working with both structured and semi-structured data.
 
-## Conclusion
-The assignment demonstrates end-to-end data engineering including ETL, relational databases, NoSQL storage, and data warehousing.
+## Challenges Faced
+
+1. Handling inconsistent and missing data across multiple CSV files was resolved using appropriate data cleaning strategies in Pandas.
+2. Designing a star schema that supports analytical queries efficiently required careful selection of grain and surrogate keys.
